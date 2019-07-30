@@ -16,6 +16,12 @@ namespace Advanced_Lesson_3_Static_Interface
         /// </summary>
         public static void AL3_P1_3()
         {
+            for (int i = 0; i < 100; i++)
+            {
+                UniqueItem oItem = new UniqueItem();
+            }
+
+            Console.WriteLine(UniqueItem.Id);
         }
 
         /// <summary>
@@ -33,9 +39,42 @@ namespace Advanced_Lesson_3_Static_Interface
         /// который будет принимать переменную обобщенного типа и выводить на консоль, 
         /// что это за тип был передан.
         /// </summary>
-        public static void AL3_P3_3()
+        public static void GuessType<T>(T item)
         {
+            Type type = item.GetType();
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.String:
+                    Console.WriteLine($"Вы передали строку длинной {item.ToString().Length} символов.");
+                    break;
+                case TypeCode.Int32 when Convert.ToInt32(item) > 0:
+                    Console.WriteLine("Вы передали положительное целое число.");
+                    break;
+                case TypeCode.Double:
+                    Console.WriteLine($"Вы передали вещественное число с {(Math.Abs(Convert.ToDecimal(item))).ToString().Length-1} значимыми цифрами.");
+                    break;
+                case TypeCode.DateTime:
+                    Console.WriteLine("Вы передали время");
+                    break;
+                default:
+                    Console.WriteLine("Понятия не имею, что вы передали.");
+                    break;
+            }
+        }
+    }
+
+    public class UniqueItem
+    {
+        public static int Id { get; private set; }
+
+        public UniqueItem()
+        {
+            Id++;
         }
 
-    }    
+        static UniqueItem()
+        {
+            Id = 1000;
+        }
+    }
 }
